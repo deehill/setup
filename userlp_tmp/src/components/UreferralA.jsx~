@@ -1,0 +1,44 @@
+import { Button, FeatureCard } from '../components';
+import { ureferralA } from '../constants';
+
+const Ureferral = () => {
+  return (
+    <section id="ureferral" className="flex flex-col md:flex-row sm:py-16 py-6">
+      <div className="flex justify-center items-start flex-col">
+        <h2 className="heading-2 text-white">
+ This has the user referral section <br />
+
+<p className="paragraph text-white">
+ gives some basic informations links to a sep page with more data information <br />
+ is this even possible <br />
+ the sep page would have thea same navBar <br />
+ what why how referral process works<br />
+ goals benefits to user <br />
+ how this might could fit with salesRep <br />
+
+-User/Referral  Data (Separate Page)
+  Rewards -User 
+ -keep track of which users are in the top X positions
+
+-will show overview of section in the ureferral.jsx file
+ -- this also links to a separate file, with 
+	more information. the sep file/process will have the 
+	navBar, tagline, as well as this section only..
+	-selecting a navBar link returns to the initial/default page
+	-need to figure out/decide if there will be a method to 
+	 directly go to the ureferral_data.jsx page, from the 
+	 navBar.. maybe a submenu item off the urefferal menu item..
+
+	-find/discuss with the dev partner for this..
+	 smooth out rough parts of the base site to have the landing page
+
+
+        </h2>
+      </div>
+
+    </section>
+  );
+};
+
+export default Ureferral;
+

@@ -1,0 +1,74 @@
+userlp/baseAA ubuntu change/test
+
+change the 
+/var/www/html/userlp/src/constants/index.js
+/var/www/html/userlp/src/components/index.js
+/var/www/html/userlp/src/components/NavbarA.jsx
+/var/www/html/userlp/src/App.jsx
+/var/www/html/userlp/vite.config.js
+
+the "html/url/ipaddress" is in the "vite.config.js" file
+
+on the ubuntu srvr
+create a userlp_tmp
+cp userlp > userlp_tmp
+
+in userlp_tmp
+npm run build
+ creates the "dist" dir
+ rm -R /var/www/html/userlp/*.*
+ rm -R /var/www/html/userlp/*
+ cp -R /var/www/html/userlp_tmp/dist/. /var/www/html/userlp
+ --at this point.. the updated build reactjs is in the userlp dir
+
+
+ chmod -R 777 ../userlp
+ chown -R crawl_user:crawl_user ../userlp
+ ls -al ../userlp
+
+
+ the "pointers" to the "userlp" dir is within the react app
+	App.jsx
+	vite.config.js
+phonejen@1
+
+root@ubuntu-s-1vcpu-2gb-nyc1-01-base-174:/var/www/html/userlp_tmp# ls -al /var/www/html/userlp
+total 8
+
+
+inside /var/www/html/userlp_tmp
+ package.json
+
+root@ubuntu-s-1vcpu-2gb-nyc1-01-base-174:/var/www/html/userlp_tmp# rm -rf /var/www/html/userlp/*
+root@ubuntu-s-1vcpu-2gb-nyc1-01-base-174:/var/www/html/userlp_tmp# rm -rf /var/www/html/userlp/*.*
+
+root@ubuntu-s-1vcpu-2gb-nyc1-01-base-174:/var/www/html/userlp_tmp# cp -rf dist/. /var/www/html/userlp
+root@ubuntu-s-1vcpu-2gb-nyc1-01-base-174:/var/www/html/userlp_tmp# ls -al /var/www/html/userlp
+
+/etc/apache2/sites-available/userlp.conf
+
+cat /apps/parseapp3/userlp_doc_jan15_23.txt
+
+	a2ensite userlp.conf
+systemctl reload apache2
+systemctl status apache2
+
+feb17_24
+all off the above seems to generate a "basic" remote page/url..
+-the react is a single page app
+-the "homepage" in the package.json ---
+	unfortunately appears to need to be set to the tgt "url"
+	-if this is run from a IP address. this needs to be changed each time,,,
+
+
+updated the 
+ App.jsx
+ NavbarA.jsx
+ src/constants/index.js
+ src/components/index.js
+ package.json
+ vite.config.js
+
+
+
+

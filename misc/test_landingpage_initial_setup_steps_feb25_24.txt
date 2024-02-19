@@ -1,0 +1,155 @@
+test_landingpage_initial_setup_steps_feb25_24.txt
+
+
+--------------------------------
+ubuntu -- feb20/24
+for the wave/react userlp
+
+test_landingpage_initial_setup_steps_feb25_24.txt
+create the repos for the "wave" , "react/userlp" apps
+-these are apps intended to simply start showing the 
+ ux/ui, sections/areas for building the initial 
+ landingPageTemplate for the userLandingPageApp for 
+ the "user" community to act as the "viral/referral" 
+ landingPageApp...
+
+-the idea is to have a user/dev look over the test apps 
+ and to get a feel for what the test app needs to have 
+ for the features/functions, and to be able to build the 
+ target app.
+
+-the target app/dev process will be tracked using the 
+ github process for maintaining the codebase, as well as 
+ test/dev/release/documentation/etc..
+
+wave -- the initial laravel app
+the "waveRepos" has the actual code build steps
+ for the ubuntu/apache2 setup
+
+wave
+
+wave.conf
+userlp.conf
+apache.conf
+.htaccess
+waveDir
+
+steps
+copy files in the waveDir repos, 
+ insert the dir into the "/var/www/html/wave" dir
+
+run steps in the "nnew" file
+-sets up the ubuntu server
+ sets up mysql/apache2
+ sets up composer
+ npm
+ laravel
+ reactjs
+ apache services/modules
+ sets up the wave.conf, userlp.conf files
+ 
+
+repos - is handled in the /home/crawl_user/setup
+file in the "repos" dir are then copied into the required dir 
+
+
+mkdir /home/crawl_user1/setup/conf
+
+cd /home/crawl_user1
+
+++++++
+cd /home/crawl_user1
+ gh auth status
+// gh repo create 
+//cd /home/crawl_user1/setup
+
+		setup
+gh repo create
+
+cd setup/
+//git init -b main
+
+//cp -Rf /home/crawl_user/landingPageOverviewDocs1/rewardsSite/. .
+
+
+
+//repo create  -setup
+mkdir /home/crawl_user1/setup/conf
+mkdir /home/crawl_user1/setup/wave
+mkdir /home/crawl_user1/setup/userlp_tmp
+mkdir /home/crawl_user1/setup/misc
+
+
+cp -rf /var/www/html/wave/. /home/crawl_user1/setup/wave/
+cp -rf /var/www/html/userlp_tmp/. /home/crawl_user1/setup/userlp_tmp/
+
+cp /etc/apache2/sites-available/wave.conf /home/crawl_user1/setup/conf/
+cp /etc/apache2/sites-available/userlp.conf /home/crawl_user1/setup/conf/
+cp /etc/apache2/apache2.conf /home/crawl_user1/setup/conf/
+cp /etc/apache2/mods-available/php8.2.* /home/crawl_user1/setup/conf/
+cp /var/www/html/wave/.htaccess /home/crawl_user1/setup/conf/
+scp -r  /apps/parseapp3/npm_build_steps_feb25_24.txt  root@161.35.5.174:/home/crawl_user1/setup/misc/
+scp -r  /apps/parseapp3/github_wave_droplet_setup_steps_feb10_24.txt  root@161.35.5.174:/home/crawl_user1/setup/misc/
+scp -r  /apps/parseapp3/setup_ubuntu_droplet_based_on_ubuntu_base_174_droplet_doc.txt  root@161.35.5.174:/home/crawl_user1/setup/misc/
+scp -r  /apps/parseapp3/test_landingpage_initial_setup_steps_feb25_24.txt  root@161.35.5.174:/home/crawl_user1/setup/misc/
+
+chown -R crawl_user:crawl_user /home/crawl_user1
+git branch -M main
+git add -A
+git commit -m "mma"
+
+git push -u origin main --force
+
+
+
+
+cp -rf /home/crawl_user/setup/userlp_tmp/. /var/www/html/userlp_tmp/
+mkdir /var/www/html/userlp
+
+chown -R www-data:www-data /var/www/html/userlp_tmp
+chown -R www-data:www-data /var/www/html/userlp
+chown -R www-data:www-data /var/www/html/wave
+
+cd /var/www/html/userlp_tmp
+npm run build
+
+
+npm_build_steps_feb25_24.txt
+github_wave_droplet_setup_steps_feb10_24.txt
+
+
+root@ubuntu-s-1vcpu-2gb-nyc1-01-base-174:/var/www/html/wave# cat /etc/apache2/sites-available/wave.conf
+<VirtualHost *:80>
+    ServerAdmin foo@yahoo.com
+    ServerName  temp22
+    ServerAlias temp
+    DocumentRoot   /var/www/html/
+
+    Alias "/wave" "/var/www/html/wave/wave/public/"
+
+    <Directory    /var/www/html/wave/wave/public>
+
+            DirectoryIndex index.html index.php
+
+            Options -Indexes +FollowSymLinks +MultiViews 
+            AllowOverride All 
+            Require all granted 
+            ##Options -Indexes +FollowSymLinks +MultiViews AllowOverride All Require all granted
+
+
+            ##Options Indexes FollowSymLinks MultiViews
+            ##Options -Indexes FollowSymlinks
+            #Options FollowSymlinks
+            #AllowOverride All
+            ##Order allow,deny
+            ##allow from all
+            #Require all granted
+    </Directory>
+
+    LogLevel debug
+    ErrorLog ${APACHE_LOG_DIR}/error.log
+    CustomLog ${APACHE_LOG_DIR}/access.log combined
+</VirtualHost>
+
+
+

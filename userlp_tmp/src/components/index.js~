@@ -1,0 +1,32 @@
+export { default as Navbar } from './Navbar';
+export { default as Hero } from './Hero';
+export { default as GetStarted } from './GetStarted';
+export { default as Stats } from './Stats';
+export { default as Features } from './Features';
+export { default as FeatureCard } from './FeatureCard';
+export { default as Button } from './Button';
+export { default as Billing } from './Billing';
+export { default as CardDeal } from './CardDeal';
+export { default as Product } from './Product';
+export { default as Testimonials } from './Testimonials';
+export { default as Clients } from './Clients';
+export { default as CTA } from './CTA';
+export { default as Footer } from './Footer';
+
+export { default as NavbarA } from './NavbarA';
+export { default as HomeA } from './HomeA';
+export { default as TgtStatsA } from './TgtStatsA';
+export { default as BizPartnerA } from './BizPartnerA';
+export { default as StudentCtaA } from './StudentCtaA';
+{/*
+export { default as WhyUsA } from './WhyUsA';
+export { default as UsersA } from './UsersA';
+*/}
+export { default as ProjectNeedsA } from './ProjectNeedsA';
+export { default as SignupA } from './SignupA';
+export { default as SignupA } from './SignupA';
+export { default as UreferralA } from './UreferralA';
+export { default as AboutusA } from './AboutusA';
+export { default as PlatformsitesA } from './PlatformsitesA';
+
+

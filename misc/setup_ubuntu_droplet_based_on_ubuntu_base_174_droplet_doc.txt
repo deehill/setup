@@ -1,0 +1,955 @@
+
+jan25/23
+ /apps/parseapp3/setup_ubuntu_droplet_based_on_ubuntu_base_174_droplet_doc.txt
+ based on the 
+ /apps/parseapp3/yogi_wave_do_docs2.txt
+
+	used to setup the additional droplets, based on the "174" - ubuntu_base_174 existing...
+
+ add the "apt install gh" for the gh remote cmds..
+
+the 174 has Ubuntu 23.10 x64
+
+the new version will have ubuntu 22.0.0.4
+
+when setting up a base ubuntu 22.0.0.4 st make sure the github apps are copied, as 
+ well as the /home dir with the users/sshkeys..
+
+
+****!!!!NOTE
+
+per the msg/mail from DO Support, finally tried/tested the posibility of 
+running the following cmd::
+  wget -qO- https://repos-droplet.digitalocean.com/install.sh | sudo bash
+
+Get a few errs and per your suggestions, did some research from the 'net, 
+found  few sites, that discussed Ubuntu 23.10 x64, (which is what the test 
+droplet -- ubuntu-s-1vcpu-2gb-nyc1-01-base-174 is)
+
+The cmds which were run to attempt to resolve whatever issue is occuring 
+to keep the "console" process from conecting
+add-apt-repository --remove ppa:ppaname/ppa
+
+   add-apt-repository --remove ppa:deadsnakes/ppa
+   add-apt-repository --remove ppa:ondrej/php
+
+These completed with no errors:
+
+The additional sequence of steps:
+ running from browser/droplet/access menu/tab 
+ (running as 'root')
+ -apt-get update
+ -wget -qO- https://repos-droplet.digitalocean.com/install.sh |  bash
+ -apt-get update
+
+then "reboot' and attempt at 'Console' to see if the process connects.
+this seems to work... a few consecutive attempts were successful
+
+you might want to "Add" this to some user facing/support doc in case someone 
+ else has this issue. I'm not sure if the same process would work with other 
+ Ubuntu OS versions.
+
+
+
+jan5/23
+
+wave/do/ubuntu steps
+
+still generates the dir/file index/list instead of site
+
+/var/log/apache2/error.log
+)Permission denied: [client 162.234.196.167:33882] AH00529: /var/www/html/wave/compose-demo/.htaccess pcfg_openfile: unable to check htaccess file, ensure it is readable and that '/var/www/html/wave/compose-demo/' is executable
+
+
+
+
+k...
+
+Need to have the test "Wave" project" completed/documented.
+
+The initial project was to create/install the "wave" app from the 
+ basic github dir.
+
+This was to be installed, to run on a test digitialocean droplet with 
+ the IP/url 
+	http://161.35.5.174
+	http://161.35.5.174/wave
+
+The project was/is also required to have "complete" documentation so someone 
+ else could replicate/perform the process.
+
+The documentation still needs to be completed.
+
+I fully apologize with not getting back to you/fiverr earlier.
+
+DigitialOcean/DO had/has some tech issues with being able to create 
+ duplicates/copies of the droplet!!!
+
+This shoud be a 10sec process, but we discovered issues. Testing took a bit 
+ of time. Still not sure it works. So I created a basic process to "copy" 
+ the required services/dirtree/etc.. from the initial droplet to new 
+ droplet.
+
+
+
+To start the docs, I tried to setup another test droplet, and create the 
+ same dir/file structure and to create the "wave" app.
+
+Unfortunately, I'm at the point, where the "wave" gets the dir index.
+ --we were here before, and you made some change to resolve this
+
+
+Here are the steps I'm using for the droplet
+	setup new droplet
+		create droplet at the ip 159.223.190.17
+		the test url will be 
+			http//http://178.128.154.65
+			http//http://142.93.193.72/wave
+
+http://178.128.154.65 --base tt
+
+The base http://178.128.154.65 droplet has the base OS
+	ubuntu 20.04
+
+The idea is to setup the test droplet with the initial services, based 
+ on what the initial droplet was/is using.
+
+Setup the ssh process for testing.. use the user/passwd
+	vi /etc/ssh/sshd_config
+
+HostKeyAlgorithms +ssh-rsa,ssh-dss
+PubkeyAcceptedKeyTypes +ssh-rsa
+
+	PermitRootLogin yes
+	PubkeyAuthentication yes
+	PasswordAuthentication yes
+
+
+	systemctl reload ssh
+	systemctl restart ssh
+
+
+Setup basic nettools
+	sshpass
+
+	apt install net-tools -y
+	apt install sshpass -y
+	apt install git -y
+	apt install gh -y
+
+Test generating the required fingerprint/key using the 
+	initial/base
+	ssh root@161.35.5.174
+		user/passwd
+		root/big_tree1smAll
+
+	this sets up the local fingerprint/key
+	log out of the initial "droplet"
+	do a "ifconfig" to ensure you're not in the initial droplet
+
+The "ifconfig" should have the local IP.. for the local droplet
+Setup the rest of the local proceses/files:
+
+
+
+//--setup apache
+
+apt update -y
+apt upgrade -y
+
+
+apt install fwupd -y
+
+apt install ca-certificates apt-transport-https software-properties-common lsb-release -y
+
+add-apt-repository ppa:ondrej/php -y
+
+apt update -y
+apt upgrade -y
+
+
+//https://www.redswitches.com/blog/install-php-on-ubuntu/
+
+/*
+	use the php8.0 for the 22.04 os ubuntu
+8.3 j25/24
+8.2
+*/
+
+//--php8.0 -- seems to satisfy the compose.json dependency for php
+-- might need php 8.0/8.1/8.2
+
+//apt remove php8.2
+
+apt remove --purge  php8.0 -y
+apt remove --purge  php8.0-cli -y
+apt remove --purge php8.0-mysql -y
+apt remove --purge  libapache2-mod-php8.0   -y
+
+apt remove --purge  php8.2 -y
+apt remove --purge  php8.2-cli -y
+apt remove --purge php8.2-mysql -y
+apt remove --purge  libapache2-mod-php8.2   -y
+
+//--apt install php8.2
+
+apt-get install php8.0 -y
+apt-get install php8.1 -y
+apt-get install php8.2 -y
+
+//--libapache2-mod-php8.1 ??? php8.0 -- seems to be php8.1 or not
+
+	//--apt install php -y
+
+	//apt install apache2 -y
+
+ppp
+	apt install php8.0-cli -y
+	apt install php8.1-cli -y
+	apt install php8.2-cli -y
+
+	apt install libapache2-mod-php8.0   -y
+	apt install libapache2-mod-php8.1   -y
+	apt install libapache2-mod-php8.2   -y
+	//--apt install libapache2-mod-php8.2   -y
+	//--apt install  php   -y 
+	apt install  php-pear  -y   		//--appears to install php8.2 stuff as well?? is there a "0"
+	//apt install  php8.0-pear  -y   
+	//apt install  php8.1-pear  -y   
+	//apt install  php8.2-pear  -y   
+
+
+	//--apt-get install php8.2-mysql -y
+	apt-get install php8.0-mysql -y
+	apt-get install php8.1-mysql -y
+	apt-get install php8.3-mysql -y
+
+
+	apt-get install composer -y
+	//--from /var/www/html/wave
+	//rm vendor dir
+	//--apppears to need/use php8.2 based on dependencies
+
+	apt install curl -y
+
+	apt install grub-pc -y
+
+	//apt install isc-dhcp-client -y
+	//apt install isc-dhcp-common -y
+
+	//apt install libapache2-mod-php8.0 -y
+	//apt install libapache2-mod-php8.2 -y
+	apt install libapache2-mod-php8.1 -y
+	apt install libapache2-mod-php8.3 -y
+	apt install nginx -y
+	apt install nodejs -y
+	apt install npm -y    //<<<< ssh.service issue???
+
+	apt install nodejs -y
+	apt install npm -y   
+
+	apt install php8.0 -y
+	apt install php8.1 -y
+	//apt install php-mcrypt -y
+
+
+
+	apt remove --purge  php8.3 -y
+	apt remove --purge  php8.3-cli -y
+	apt remove --purge  php8.3-curl -y
+	apt remove --purge  php8.3-gd -y
+	apt remove --purge  php8.3-mysql -y
+	apt remove --purge  php8.3-redis -y
+	apt remove --purge  php8.3-xml -y
+	apt remove --purge  php8.3-zip -y
+	apt remove --purge  php8.3-mcrypt -y
+	apt remove --purge  php8.0-intl -y
+	apt remove --purge  php8.0-mbstring -y
+
+	apt remove --purge  php8.2-cli -y
+	apt remove --purge  php8.2-curl -y
+	apt remove --purge  php8.2-gd -y
+	apt remove --purge  php8.2-mysql -y
+	apt remove --purge  php8.2-redis -y
+	apt remove --purge  php8.2-xml -y
+	apt remove --purge  php8.2-zip -y
+	apt remove --purge  php8.2-mcrypt -y
+
+	apt remove --purge  php8.0-cli -y
+	apt remove --purge  php8.0-curl -y
+	apt remove --purge  php8.0-gd -y
+	apt remove --purge  php8.0-mysql -y
+	apt remove --purge  php8.0-redis -y
+	apt remove --purge  php8.0-xml -y
+	apt remove --purge  php8.0-zip -y
+	apt remove --purge  php8.0-mcrypt -y
+
+
+	apt install php8.0-cli -y
+	apt install php8.0-curl -y
+	apt install php8.0-gd -y
+	apt install php8.0-mysql -y
+	apt install php8.0-redis -y
+	apt install php8.0-xml -y
+	apt install php8.0-zip -y
+	apt install php8.0-mcrypt -y
+	apt-get install php8.0-intl -y
+	apt-get install php8.0-mbstring -y
+
+	apt install php8.1-cli -y
+	apt install php8.1-curl -y
+	apt install php8.1-gd -y
+	apt install php8.1-mysql -y
+	apt install php8.1-redis -y
+	apt install php8.1-xml -y
+	apt install php8.1-zip -y
+	apt install php8.1-mcrypt -y
+	apt-get install php8.1-intl -y
+	apt-get install php8.1-mbstring -y
+
+	apt install php8.2-cli -y
+	apt install php8.2-curl -y
+	apt install php8.2-gd -y
+	apt install php8.2-mysql -y
+	apt install php8.2-redis -y
+	apt install php8.2-xml -y
+	apt install php8.2-zip -y
+	apt install php8.2-mcrypt -y
+	apt-get install php8.2-intl -y
+	apt-get install php8.2-mbstring -y
+
+jan25/24
+	apt install php8.3-cli -y
+	apt install php8.3-curl -y
+	apt install php8.3-gd -y
+	apt install php8.3-mysql -y
+	apt install php8.3-redis -y
+	apt install php8.3-xml -y
+	apt install php8.3-zip -y
+	//apt install php8.3-mcrypt -y  --for php7 on. appears to no longer be included..
+	apt-get install php8.3-intl -y
+	apt-get install php8.3-mbstring -y
+
+
+	//apt install php8.2-cli -y
+	//apt install php8.2-curl -y
+	//apt install php8.2-gd -y
+	//apt install php8.2-mysql -y
+	//apt install php8.2-redis -y
+	//apt install php8.2-xml -y
+	//apt install php8.2-zip -y
+	//apt install php8.2-mcrypt -y
+
+
+	//apt install python3.11 -y
+		//--should already by here..
+	apt-get install -y rename
+
+	apt install python3-pip -y
+
+	apt install apache2 -y
+	apt install apache2-bin -y
+	apt install apache2-utils -y
+
+
+/docker
+/*
+	apt install apt-transport-https curl gnupg-agent ca-certificates software-properties-common -y
+	curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
+	add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable"
+	apt install docker-ce docker-ce-cli containerd.io -y
+	usermod -aG docker $USER
+	newgrp docker
+*/
+
+/*
+apt-get update
+ apt-get install ca-certificates curl gnupg
+ install -m 0755 -d /etc/apt/keyrings
+ -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+ chmod a+r /etc/apt/keyrings/docker.gpg
+
+# Add the repository to Apt sources:
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+  $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+   tee /etc/apt/sources.list.d/docker.list > /dev/null
+ apt-get update
+
+apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+*/
+
+apt-get update -y
+apt-get install isc-dhcp-client -y
+apt-get install isc-dhcp-common -y
+
+
+//--docker-ce
+
+//--the idea, to have a single php8.0 conf/load
+//--generates the loadmod libphp8.0.so
+
+mv /etc/apache2/mods-available/php8.0.conf_ /etc/apache2/mods-available/php8.0.conf 
+mv /etc/apache2/mods-available/php8.0.load_ /etc/apache2/mods-available/php8.0.load
+
+//mv /etc/apache2/mods-available/php8.0.conf /etc/apache2/mods-available/php8.0.conf_ 
+//mv /etc/apache2/mods-available/php8.0.load /etc/apache2/mods-available/php8.0.load_
+cp /etc/apache2/mods-available/php8.2.conf /etc/apache2/mods-available/php8.0.conf 
+cp /etc/apache2/mods-available/php8.2.load /etc/apache2/mods-available/php8.0.load
+cp /etc/apache2/mods-available/php8.2.conf /etc/apache2/mods-available/php8.1.conf_ 
+cp /etc/apache2/mods-available/php8.2.load /etc/apache2/mods-available/php8.1.load_
+cp /etc/apache2/mods-available/php8.1.conf_ /etc/apache2/mods-available/php8.2.conf 
+cp /etc/apache2/mods-available/php8.1.load_ /etc/apache2/mods-available/php8.2.load
+mv /etc/apache2/mods-available/php8.2.conf /etc/apache2/mods-available/php8.2.conf_ 
+mv /etc/apache2/mods-available/php8.2.load /etc/apache2/mods-available/php8.2.load_
+
+	a2dissite 
+	a2ensite 
+
+a2dismod
+a2enmod
+a2enmod php8.0
+a2enmod php8.1
+//a2enmod php8.2
+a2enmod rewrite
+
+
+	//setup- rsync/cp the files..
+	//--excludes the basic system files for the local droplet.. these are 
+		to use the local files/processes
+
+http://178.128.154.65
+yy
+
+	sshpass -p 'big_tree1smAll'  rsync -avr -e ssh root@161.35.5.174:/  / --exclude=/usr/lib  --ignore-existing
+
+	sshpass -p 'big_tree1smAll'  rsync -avr -e ssh root@161.35.5.174:/  / --exclude=/boot  --exclude=/sys  --exclude=/proc  --exclude=/lib  --exclude=/usr/lib  --exclude=/lib32 --exclude=/xlib32  --exclude=/lib64  --exclude=/usr/lib64  --exclude=/media  --exclude=/mnt   --exclude=/opt   --exclude=/proc  --exclude=/bin   --exclude=/usr/bin   --exclude=/dev   --exclude=/sbin   --exclude=/srv   --exclude=/lost+found   --exclude=/snap     --ignore-existing
+
+	sshpass -p 'big_tree1smAll'  rsync -avr -e ssh root@161.35.5.174:/etc/passwd  /etc/passwd  
+	sshpass -p 'big_tree1smAll'  rsync -avr -e ssh root@161.35.5.174:/etc/group  /etc/group  
+
+vipw command edits the files /etc/passwd
+vigr command edits the files /etc/group
+
+
+	sshpass -p 'big_tree1smAll'  rsync -avr  -e ssh root@161.35.5.174:/var/www/  /var/www/     --ignore-existing
+
+
+//--works...
+	sshpass -p 'big_tree1smAll'  rsync -avr  -e ssh root@161.35.5.174:/var/www/html/  /var/www/html/     --ignore-existing
+
+	sshpass -p 'big_tree1smAll'  rsync -avr   -e ssh root@161.35.5.174:/etc/apache2/sites-available/  /etc/apache2/sites-available/     --ignore-existing
+
+
+--to test in case of prior error..
+	sshpass -p 'big_tree1smAll'  rsync -avrnq -e ssh root@161.35.5.174:/  / --exclude=/boot  --exclude=/sys  --exclude=/proc  --exclude=lib  --exclude=/usr/lib  --exclude=lib32 --exclude=xlib32  --exclude=lib64  --exclude=/usr/lib64   --exclude=/bin   --exclude=/usr/bin     --ignore-existing
+
+//--	sshpass -p 'big_tree1smAll'  rsync -avr  -e ssh root@161.35.5.174:/var/lib/mysql/.  /var/lib/mysql
+
+//--sshpass -p 'big_tree1smAll'  rsync -avr   -e ssh root@161.35.5.174:/var/lib/mysql/wave/.  /var/lib/mysql/wave
+
+sshpass -p 'big_tree1smAll'  rsync -avr  -e ssh root@161.35.5.174:/etc/apache2/apache2.conf  /etc/apache2/
+
+//--copies into the /home dir for the users...
+sshpass -p 'big_tree1smAll'  rsync -avr  -e ssh root@161.35.5.174:/home  /.
+
+sshpass -p 'big_tree1smAll'  rsync -avr  -e ssh root@161.35.5.174:/etc  /etc  --exclude=apache2  --exclude=apparmor  --exclude=apparmor.d  --exclude=apport  --exclude=apt  --exclude=console-setup  --exclude=containerd  --exclude=credstore  --exclude=credstore.encrypted  --exclude=dbus-1  --exclude=dhcp  --exclude=dhcpcd.conf  --exclude=docker  --exclude=dpkg  --exclude=fwupd  --exclude=kernel  --exclude=landscape  --exclude=localtime  --exclude=mke2fs.conf  --exclude=modprobe.d  --exclude=modules  --exclude=modules-load.d  --exclude=mtab  --exclude=multipath  --exclude=mysql  --exclude=nginx  --exclude=nsswitch.conf  --exclude=opt  --exclude=pam*  --exclude=perl  --exclude=php  --exclude=pki  --exclude=pm  --exclude=polkit-1  --exclude=pollinate  --exclude=profile*  --exclude=python*  --exclude=rc*  --exclude=rmt  --exclude=security  --exclude=selinux  --exclude=sensors*  --exclude=services*  --exclude=sgml  --exclude=skel  --exclude=sos   --exclude=ssh  --exclude=ssl   --exclude=systemd  --exclude=terminfo   --exclude=ubuntu-advantage  --exclude=udev   --exclude=udisks2  --exclude=ufw   --exclude=update-manager  --exclude=update-motd.d  --exclude=update-notifier  --exclude=vconsole.conf  --exclude=vim  --exclude=vmware-tools  --exclude=vtrgb  --exclude=xdg  --exclude=xml  --exclude=apache2   -ignore-existing 
+
+
+	apt-get install composer -y
+		//--the install of composer adds a number of packages.. as well as php8.2 stuff
+	composer install
+
+	systemctl restart apache2
+	systemctl status apache2
+
+
+//--mysql
+//--setup mysql
+
+apt-get remove --purge mysql-server mysql-client mysql-common
+apt-get autoremove
+
+/*
+j25/24
+ for mysql that's copied from 174
+ to get to the 22.04 mysql
+ apt-get remove --purge mysql-server mysql-client mysql-common
+ apt --fix-broken install
+ reboot
+ apt --fix-broken install
+ apt-get install -f mysql-server -y
+
+ systemctl stop/start mysql
+ --should work
+*/
+    //--apt install mysql-server
+	apt-get install -f mysql-server -y
+
+	//apt install mysql-client-core-8.0 -y
+	//apt install mysql-server-core-8.0
+    systemctl start mysql
+
+//--systemctl restart apparmor
+    systemctl start mysql
+
+//--from the 174/init srvr
+mysqldump -u [user] -p --all-databases > all_databases.sql
+mysqldump -u root -pnew_password --all-databases > /all_databases.sql
+
+//--from the tgt/local srvr
+ sshpass -p 'big_tree1smAll' scp root@161.35.5.174:/all_databases.sql /all_databases.sql
+//-scp root@161.35.5.174:/all_databases.sql /all_databases.sql 
+//-scp /all_databases.sql root@example.com:/all_databases.sql
+mysql -u root -pnew_password < /all_databases.sql
+
+/etc/mysql/mysql.conf.d/mysqld.cnf
+cat /etc/apparmor.d/tunables/alias 
+
+
+
+
+
+142.93.193.72
+Once files are rsync/copied
+	-do the mysql  /apache  /wave process setup
+
+	 might involve the mods-available
+	 might involve changes to sites-available/wave.conf
+	 might changes to the .htaccess
+
+	//--after loading mysql files from the initial/base mysql dir/tree
+    systemctl restart mysql
+
+	//--after loading apache files from the initial/base mysql dir/tree
+
+	//--in the /var/www/html/wave/wave/.env
+vi /var/www/html/wave/wave/.env
+		vi .env
+		change the url
+			APP_URL="http://foo"
+			APP_URL="http://162.243.174.230"
+178.128.145.148
+206.189.228.181
+162.243.174.230
+
+fo mysql ----possibly
+//-ALTER USER 'wave_user'@'localhost' IDENTIFIED WITH mysql_native_password BY 'wavepass';
+
+
+	a2dissite
+	a2ensite wave.conf
+	a2enmod rewrite		#--mod rewrite
+	systemctl reload apache2
+	systemctl restart apache2
+	a2dismod autoindex
+
+
+	systemctl reload apache2
+	systemctl restart apache2
+	apachectl -S
+
+a2dismod php8.0
+a2enmod php8.0
+a2dismod php8.1
+a2enmod php8.1
+
+
+a2dismod php8.0 
+a2enmod php8.0 
+a2dismod rewrite	
+a2enmod rewrite	 
+a2dissite 
+a2ensite wave.conf 
+
+a2dismod php8.2 
+a2enmod php8.2 
+a2dismod rewrite	
+a2enmod rewrite	 
+
+jan25/24
+php8.3
+a2dismod mpm_prefork
+a2dismod mpm_event
+a2enmod mpm_event
+
+
+a2dissite 
+a2dismod php8.3 
+a2enmod php8.3 
+a2enmod rewrite	 
+//--this seems to take care of php8.3 err..
+//-- running systemctl restart apache2 - then seems to run ok..
+a2dismod mpm_prefork
+a2dismod mpm_event
+a2enmod mpm_event
+
+a2dissite 000-default.conf
+a2dissite default-ssl.conf
+a2dissite wave.conf
+a2ensite wave.conf 
+
+
+--ok need to be in the correct location to run::
+cd /var/www/html/wave/wave
+
+rm -Rf /var/www/html/wave/composer.lock
+rm -Rf /var/www/html/wave/vendor
+//--rm -Rf /var/www/html/wave/wave/public
+rm -Rf /var/www/html/wave/wave/storage/app/public
+rm -Rf /var/www/html/wave/wave/wave/docs
+
+rm /var/www/html/wave/wave/wave/docs
+rm /var/www/html/wave/wave/storage/app/public
+
+//--the symlink
+rm -f /var/www/html/wave/wave/public/storage
+sudo -u www-data php artisan storage:link
+
+rm -f /var/www/html/wave/wave/public/storage
+rm /var/www/html/wave/wave/public/wave/docs
+sudo -u www-data php artisan storage:link
+sudo -u www-data php artisan wave/docs:link
+
+/*
+	the vendor dir is created by the
+	sudo -u www-data composer install <<<<< cmd  feb25/24
+
+	weird thing.. the wave/wave/wave is apparently 
+	valid.. not sure if the "composer install" generates the 
+	dir structure...
+	-the github/repos doesn't have the "wave/wave/wave"
+	-but the process seems to work...
+	-need to figure out how (if this is used) to be able to 
+	 mod the app.. where would mod functions be inserted/etc..
+	 bdouglas
+*/
+sudo -u www-data composer -- run composer as www-data
+composer update
+composer install
+sudo -u www-data composer update
+sudo -u www-data composer install
+
+58 package suggestions were added by new dependencies, use `composer suggest` to see details.
+Generating optimized autoload files
+> Illuminate\Foundation\ComposerScripts::postAutoloadDump
+> @php artisan package:discover
+Could not open input file: artisan
+Script @php artisan package:discover handling the post-autoload-dump event returned with error code 1
+
+
+php artisan migrate
+
+php artisan db:seed
+   INFO  Seeding database.  
+
+  Database\Seeders\RolesTableSeeder ........................................................................................................ RUNNING  
+
+   Illuminate\Database\QueryException 
+
+  SQLSTATE[23000]: Integrity constraint violation: 1451 Cannot delete or update a parent row: a foreign key constraint fails (`wave`.`users`, CONSTRAINT `users_role_id_foreign` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`)) (SQL: delete from `roles`)
+
+  at vendor/laravel/framework/src/Illuminate/Database/Connection.php:760
+    756▕         // If an exception occurs when attempting to run a query, we'll format the error
+    757▕         // message to include the bindings with SQL, which will make this exception a
+    758▕         // lot more helpful to the developer instead of just the database's errors.
+    759▕         catch (Exception $e) {
+  ➜ 760▕             throw new QueryException(
+    761▕                 $query, $this->prepareBindings($bindings), $e
+    762▕             );
+    763▕         }
+    764▕     }
+
+      +10 vendor frames 
+  11  database/seeders/RolesTableSeeder.php:19
+      Illuminate\Database\Query\Builder::delete()
+
+      +8 vendor frames 
+  20  database/seeders/DatabaseSeeder.php:17
+      Illuminate\Database\Seeder::call()
+
+--getting closer....
+
+//--ust in case it's running...
+systemctl stop nginx
+
+//--as a last catchall to start/run...
+systemctl restart apache2
+systemctl status apache2
+
+
+//-- is the perm on the symlink the perm/err issue???
+cd /var/www/html/wave/wave/public
+chown -h www-data:www-data storage
+
+
+
+at this point.. everything should "be ok" ready to work...
+firing up the url...
+ http://http://142.93.193.72/wave/
+ http://206.189.228.181/wave/
+
+206.189.228.181
+
+gets the error.. as in the /var/log/apache2/error.log
+
+[Thu Jan 04 21:08:01.936019 2024] [core:notice] [pid 110229] AH00094: Command line: '/usr/sbin/apache2'
+[Thu Jan 04 21:08:39.969442 2024] [core:crit] [pid 110232] (13)Permission denied: [client 162.234.196.167:33882] AH00529: /var/www/html/wave/compose-demo/.htaccess pcfg_openfile: unable to check htaccess file, ensure it is readable and that '/var/www/html/wave/compose-demo/' is executable
+
+
+
+
+
+
+------------------------------------------------------------
+
+So. 
+	Need you/Yogi to look all of this over, and to get the http://159.223.190.17
+	 to work as the base 161.35.5.174
+
+Once this set of docs is good.. I'll use the docs, on a fresh droplet, and 
+ see if everything/all the steps work!
+
+If this is solid!! We can talk about the next steps.....
+
+Thanks much!!
+
+ps
+ in the howto/instructions -- need to have any required steps implement/build/run the "Wave" app
+
+
+apache2ctl -M
+apache2ctl -S
+apache2ctl -Mapache2ctl -Mapache2ctl - 
+
+
+jan5/23
+ still analyzing the "17"
+notice the changes in the 
+mv /var/www/html/wave/.htaccess  /var/www/html/wave/hhtaccess
+  
+cat /var/www/html/wave/wave/public/.htaccess
+<IfModule mod_rewrite.c>
+    <IfModule mod_negotiation.c>
+        Options -MultiViews -Indexes
+    </IfModule>
+
+    RewriteEngine On
+    RewriteBase /wave/
+    # Handle Authorization Header
+    RewriteCond %{HTTP:Authorization} .
+    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+    # Redirect Trailing Slashes If Not A Folder...
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_URI} (.+)/$
+    RewriteRule ^ %1 [L,R=301]
+
+    # Send Requests To Front Controller...
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^ index.php [L]
+</IfModule>
+
+and the 
+cat /etc/apache2/sites-available/wave.conf: Alias
+
+
+/wave/storage/app/public ??? why is this in "17"  but not in yy
+
+in mysql
+UNINSTALL COMPONENT "file://component_validate_password";
+ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'new_password';
+ALTER USER 'wave_user'@'localhost' IDENTIFIED WITH mysql_native_password BY 'wavepass';
+
+
+ cat /etc/apache2/sites-available/wave.conf
+ vi /etc/apache2/sites-available/wave.conf
+
+<VirtualHost *:80>
+    ServerAdmin foo@yahoo.com
+    ServerName  temp22
+    ServerAlias temp
+    DocumentRoot   /var/www/html/
+
+    <Directory    /var/www/html/wave/wave/public>
+
+            DirectoryIndex index.html index.php
+
+            Options -Indexes +FollowSymLinks +MultiViews
+            AllowOverride All
+            Require all granted
+            ##Options -Indexes +FollowSymLinks +MultiViews AllowOverride All Require all granted
+
+
+            ##Options Indexes FollowSymLinks MultiViews
+            ##Options -Indexes FollowSymlinks
+            #Options FollowSymlinks
+            #AllowOverride All
+            ##Order allow,deny
+            ##allow from all
+            #Require all granted
+    </Directory>
+
+    Alias "/wave" "/var/www/html/wave/wave/public/"
+
+    LogLevel debug
+    ErrorLog ${APACHE_LOG_DIR}/error.log
+    CustomLog ${APACHE_LOG_DIR}/access.log combined
+</VirtualHost>
+
+
+
+-------------------
+https://www.digitalocean.com/community/tutorials/how-to-set-up-a-react-project-with-vite
+
+https://github.com/sanidhyy/bank-modern-app
+ for some basic steps/instructions
+
+
+react test for do.....
+ssh root@http://178.128.154.65
+
+yarn
+Command 'yarn' not found, but can be installed with:
+apt install cmdtest
+apt install npm
+
+to install yarn/node - use npm
+npm -g i yarn
+npm -g i node
+
+and then launch new term.. 
+	(launching new term might not be required.. but it works)
+
+
+npm -v
+node -v
+
+test proj creation
+ --what does this create/
+	what dir/
+	what's in the dir
+
+test this in a diff dir....
+ should this be in a "parent" dir..
+
+yarn create vite
+
+success Installed "create-vite@2.9.0" with binaries:
+- create-vite
+- cva
+? Project name: » ????? <enter name
+
+digital-ocean-vite
+test-name
+
+? Select a framework: » - Use arrow-keys. Return to submit.
+Vanilla
+Vue
+> React
+
+? Select a variant: » - Use arrow-keys. Return to submit.
+> JavaScript
+
+/*
+root@ubuntu-s-1vcpu-2gb-nyc1-rtt:~# cd /home/testuser/
+root@ubuntu-s-1vcpu-2gb-nyc1-rtt:/home/testuser# yarn create vite
+yarn create v1.22.21
+[1/4] Resolving packages...
+⠁ (node:205210) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+[2/4] Fetching packages...
+[3/4] Linking dependencies...
+[4/4] Building fresh packages...
+success Installed "create-vite@5.1.0" with binaries:
+      - create-vite
+      - cva
+✔ Project name: … testp
+✔ Select a framework: › React
+✔ Select a variant: › JavaScript
+
+Scaffolding project in /home/testuser/testp...
+
+Done. Now run:
+
+  cd testp
+		--at this point, testp has the "react proj" dir/tree/files
+			so the test github proj baseAA -- userlp
+			has/will havethe
+
+  yarn
+  yarn dev
+
+
+ls -al testp
+
+.eslintrc.cjs
+.gitignore
+README.md
+index.html
+package.json
+d public
+d src
+vite.config.js
+
+*/
+
+in the  case of the test /var/www/html/userlp
+	the process has the "files" from the 
+	github test
+	-the git/clone/cp from the git repo to 
+	 the remote dir has the "proj" files..
+so now what??
+ whats next in the steps to create the remote/test
+ webapp??
+
+yarn run dev ??
+yarn run build
+
+in linux/ubuntu..
+appears 
+yarn run dev
+yarn run v1.22.21
+error package.json: Name contains illegal characters
+  "name": "test page",
+
+try....
+  "name": "test_page",
+
+run npm install
+ does this correct the err from the "yarn run dev"
+	module_not_found.. err
+run 
+ "npm install"  -- got errs... weird..
+ tried
+ "yum install"  -- seemed to run..
+  then reran "npm install" -- which ran..
+
+ which generated a "node_modules" dir...
+
+---------------------
+should be set to run the test proj
+
+
+
+cd test-name
+yarn
+yarn run dev
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
